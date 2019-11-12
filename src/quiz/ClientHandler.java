@@ -26,6 +26,7 @@ public class ClientHandler implements Runnable {
 
             do {
                 output.writeObject(database.getRandomQuestion());
+
             } while (input.readObject()!=null);
 
 
