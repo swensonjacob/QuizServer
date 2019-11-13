@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class QuizServer {
 
-    ClientHandler clientHandler;
+    Game clientHandler;
 
 
     public QuizServer() {
@@ -14,8 +14,9 @@ public class QuizServer {
 
 
             while (true) {
-                Socket socket = serverSocket.accept();
-                Thread t = new Thread(new ClientHandler(socket));
+                Socket socket1 = serverSocket.accept();
+                Socket socket2 = serverSocket.accept();
+                Thread t = new Thread(new Game(socket1,socket2));
                 t.start();
             }
 

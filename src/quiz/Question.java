@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class Question implements Serializable {
 
     private String questionText;
-
     private String answerOne;
     private String answerTwo;
     private String answerThree;
