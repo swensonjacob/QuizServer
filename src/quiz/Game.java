@@ -1,5 +1,6 @@
 package quiz;
 
+        import java.io.IOException;
         import java.net.Socket;
 
 public class Game implements Runnable {
@@ -14,34 +15,56 @@ public class Game implements Runnable {
     public Game(Socket socketP1, Socket socketP2) {
         this.player1 = new Player("Player 1",socketP1);
         this.player2 = new Player("Player 2",socketP2);
+        player1.setOpponent(player2);
+        player2.setOpponent(player1);
         this.database = new Database();
         this.rounds = 2;
     }
 
     @Override
     public void run() {
-
-        for (int i = 0; i < 3; i++) {
-            roundOfQuestions(player1);
-            roundOfQuestions(player2);
+        try {
+            newGame();
+        }catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
         }
 
     }
 
-    public void roundOfQuestions (Player player) {
-        Object inputFromPlayer;
+    public void newGame() throws IOException, ClassNotFoundException{
+        newRound(player1,player2);
+        printRoundPoints();
+        newRound(player2,player1);
+        printTotalPoints();
+    }
 
-        try {
-            player.sendQuestion(database.getRandomQuestion());
-            inputFromPlayer = player.getInput();
-            if (inputFromPlayer instanceof String) {
+    public void newRound(Player p1, Player p2) throws IOException,ClassNotFoundException {
+        CategoryName categoryName = p1.getCategoryFromUser();
+        for (int i = 0; i < rounds; i++) {
+            Question question = database.getRandomQuestionFromCategory(categoryName);
+            setOfQuestions(p1,p2,question);
+            setOfQuestions(p2,p1,question);
+    }
+
+    }
+
+    public void setOfQuestions(Player player, Player opponent, Question question) throws IOException,ClassNotFoundException {
+
+        Object inputFromPlayer;
+            player.sendQuestion(question);
+            opponent.sendString("Waiting on opponent to answer question");
+            if ((inputFromPlayer = player.getInput()) instanceof String) {
                 if (inputFromPlayer.equals("correct")) {
                     player.addPoint();
                 }
-                System.out.println(player.getPoints());
             }
-        }catch (Exception e) {
-            System.out.println("IOException: " + e.getMessage());
-        }
+    }
+    public void printRoundPoints() throws IOException {
+        player1.sendRoundPoints();
+        player2.sendRoundPoints();
+    }
+    public void printTotalPoints() throws IOException {
+        player1.sendTotalPoints();
+        player2.sendTotalPoints();
     }
 }
