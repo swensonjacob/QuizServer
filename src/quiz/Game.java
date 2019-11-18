@@ -1,24 +1,20 @@
 package quiz;
 
-        import java.io.IOException;
-        import java.net.Socket;
+import java.io.IOException;
+import java.net.Socket;
 
 public class Game implements Runnable {
 
-    private Player player1;
-    private Player player2;
     private int questionsPerRound;
     private int rounds;
-
-
+    private Player[] players;
     private Database database;
 
     public Game(Socket socketP1, Socket socketP2) {
         Settings gameSettings = new Settings();
-        this.player1 = new Player("Player 1",socketP1);
-        this.player2 = new Player("Player 2",socketP2);
-        player1.setOpponent(player2);
-        player2.setOpponent(player1);
+        players = new Player[] {new Player("Player 1", socketP1),new Player("Player 2", socketP2)};
+        players[0].setOpponent(players[1]);
+        players[1].setOpponent(players[0]);
         this.database = new Database();
         this.questionsPerRound = gameSettings.getNumberOfQuestions();
         this.rounds = gameSettings.getNumberOfRounds();
@@ -28,59 +24,61 @@ public class Game implements Runnable {
     public void run() {
         try {
             newGame();
-        }catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
-
     }
-
-    public void newGame() throws IOException, ClassNotFoundException{
-
-        Player p1 = player1;
-        Player p2 = player2;
-        Player temp;
+    /**
+     * Skapar nytt spel där newRound() anropas antal ggr som finns angivet i settings.
+     */
+    public void newGame() throws IOException, ClassNotFoundException {
 
         for (int i = 0; i < rounds; i++) {
-            newRound(p1,p2);
-            temp=p1;
-            p1=p2;
-            p2=temp;
-            if (i!=rounds-1) {
+            newRound();
+            if (i != rounds - 1) {
                 printRoundPoints();
             }
         }
         printTotalPoints();
     }
-
-    public void newRound(Player p1, Player p2) throws IOException,ClassNotFoundException {
-
-        CategoryName categoryName = p1.getCategoryFromUser();
-
+    /**
+     * Ny runda skapas där val av kategori inhämtas från player1, genom en nästlad for-loop hämtas en slumpad fråga och
+     * skickas till båda spelarna i players[] det antal ggr som är lika med frågor per runda enligt settings
+     */
+    public void newRound() throws IOException, ClassNotFoundException {
+        CategoryName categoryName = players[0].getCategoryFromUser();
         for (int i = 0; i < questionsPerRound; i++) {
             Question question = database.getRandomQuestionFromCategory(categoryName);
-            setOfQuestions(p1,p2,question);
-            setOfQuestions(p2,p1,question);
-    }
-
-    }
-
-    public void setOfQuestions(Player player, Player opponent, Question question) throws IOException,ClassNotFoundException {
-
-        Object inputFromPlayer;
-            player.sendQuestion(question);
-            opponent.sendString("Waiting on opponent to answer question");
-            if ((inputFromPlayer = player.getInput()) instanceof String) {
-                if (inputFromPlayer.equals("correct")) {
-                    player.addPoint();
-                }
+            for (Player player : players) {
+                setOfQuestions(player, question);
             }
+        }
     }
+    /**
+     * Skickar fråga till spelare, läser in svar från användaren.
+     * är inkommande objekt en en String innehållande "correct" adderas spelarens poäng.
+     */
+    public void setOfQuestions(Player player, Question question) throws IOException, ClassNotFoundException {
+        player.sendQuestion(question);
+        Object inputFromPlayer = player.getInput();
+        if (inputFromPlayer.equals("correct")) {
+            player.addPoint();
+        }
+    }
+    /**
+     * Skickar rundans resultat till användaren och nollställer rundans poäng till nästa runda.
+     */
     public void printRoundPoints() throws IOException {
-        player1.sendRoundPoints();
-        player2.sendRoundPoints();
+        players[0].sendRoundPoints();
+        players[1].sendRoundPoints();
+        players[0].setRoundPoints(0);
+        players[1].setRoundPoints(0);
     }
+    /**
+     * Skickar totalt resultat till användaren
+     */
     public void printTotalPoints() throws IOException {
-        player1.sendTotalPoints();
-        player2.sendTotalPoints();
+        players[0].sendTotalPoints();
+        players[1].sendTotalPoints();
     }
 }

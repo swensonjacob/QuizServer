@@ -24,11 +24,9 @@ public class Database implements Serializable {
         allQuestions.add(animal);
         allQuestions.add(furniture);
     }
-
-    public List<QuestionCategory> getAllQuestions() {
-        return allQuestions;
-    }
-
+    /**
+     * Hämtar slumpad fråga utifrån ingående CategoryName.
+     */
     public Question getRandomQuestionFromCategory(CategoryName category) {
         if (category.equals(CategoryName.ANIMAL)) {
            return getRandomQuestion(animal);
