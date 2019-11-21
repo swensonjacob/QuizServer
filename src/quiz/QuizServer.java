@@ -16,8 +16,7 @@ public class QuizServer {
             while (true) {
                 Socket socket1 = serverSocket.accept();
                 Socket socket2 = serverSocket.accept();
-                Thread t = new Thread(new Game(socket1,socket2));
-                t.start();
+                new Thread(new Game(socket1,socket2)).start();
             }
 
             } catch(IOException e) {

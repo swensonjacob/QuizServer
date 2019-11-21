@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Player {
 
@@ -50,7 +53,7 @@ public class Player {
      * Skickar Question till Player och String till opponent,
      */
     public void sendQuestion(Question question) throws IOException {
-        opponent.sendString("Waiting on opponent to answer question");
+        opponent.sendString("Inväntar svar från motståndare");
         output.writeObject(question);
     }
 
@@ -104,11 +107,13 @@ public class Player {
      * läser in CategoryChooser och returnerar valt CategoryName
      */
     public CategoryName getCategoryFromUser() throws IOException, ClassNotFoundException {
-        opponent.sendString("Waiting on your opponent to choose category");
-        output.writeObject(new CategoryChooser());
-        CategoryChooser categoryFromUser = (CategoryChooser) input.readObject();
+        List<CategoryName> enumList = Arrays.asList(CategoryName.values());
+        Collections.shuffle(enumList);
+        List<CategoryName> categoryList = Arrays.asList(enumList.get(0),enumList.get(1),enumList.get(2),enumList.get(3));
+        opponent.sendString("Inväntar val av kategori från din motståndare");
+        output.writeObject(categoryList);
 
-        return categoryFromUser.getChoosedCategory();
+        return (CategoryName) input.readObject();
     }
 }
 

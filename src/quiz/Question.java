@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Question implements Serializable {
 
+    private CategoryName category;
     private String questionText;
     private String answerOne;
     private String answerTwo;
@@ -11,12 +12,18 @@ public class Question implements Serializable {
     private String answerCorrect;
     static final long serialVersionUID = 42L;
 
-    public Question(String questionText, String answerOne, String answerTwo, String answerThree, String answerCorrect) {
+    public Question(CategoryName category,String questionText, String answerOne, String answerTwo, String answerThree, String answerCorrect) {
+        this.category = category;
         this.questionText = questionText;
         this.answerOne = answerOne;
         this.answerTwo = answerTwo;
         this.answerThree = answerThree;
         this.answerCorrect = answerCorrect;
+    }
+
+
+    public CategoryName getCategory() {
+        return category;
     }
 
     public String getQuestionText() {
