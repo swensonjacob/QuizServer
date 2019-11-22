@@ -18,9 +18,7 @@ public class Game implements Runnable {
         players.get(1).setOpponent(players.get(0));
         settings = new Settings();
         this.database = new Database(settings);
-
     }
-
     @Override
     public void run() {
         try {
@@ -48,7 +46,6 @@ public class Game implements Runnable {
      */
     public void newRound() throws IOException, ClassNotFoundException {
         List<Question> roundQuestions = database.getRoundQuestions(players.get(0).getCategoryFromUser());
-        System.out.println(roundQuestions.size());
         for (Player player : players) {
             player.getOpponent().sendString("Inväntar svar från motståndare");
         for (int i = 0; i < roundQuestions.size(); i++) {
