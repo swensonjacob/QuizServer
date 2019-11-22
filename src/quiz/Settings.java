@@ -1,14 +1,13 @@
 package quiz;
 
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
 public class Settings {
 
    private int numberOfRounds;
-   private int numberOfQuestions;
+   private int questionsPerRound;
 
     /**
      * Inhämtar inställningar gällande antal rundor och antal frågor per runda genom .properties-fil
@@ -22,7 +21,7 @@ public class Settings {
         }
 
         this.numberOfRounds = Integer.parseInt(properties.getProperty("rounds"));
-        this.numberOfQuestions = Integer.parseInt(properties.getProperty("questions"));
+        this.questionsPerRound = Integer.parseInt(properties.getProperty("questions"));
 
     }
 
@@ -30,7 +29,7 @@ public class Settings {
         return numberOfRounds;
     }
 
-    public int getNumberOfQuestions() {
-        return numberOfQuestions;
+    public int getQuestionsPerRound() {
+        return questionsPerRound;
     }
 }

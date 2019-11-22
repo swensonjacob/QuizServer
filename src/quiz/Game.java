@@ -8,19 +8,17 @@ import java.util.List;
 
 public class Game implements Runnable {
 
-    private int questionsPerRound;
-    private int rounds;
     private List<Player> players;
     private Database database;
+    private Settings settings;
 
     public Game(Socket socketP1, Socket socketP2) {
-        Settings gameSettings = new Settings();
         players = Arrays.asList(new Player("Player 1", socketP1), new Player("Player 2", socketP2));
         players.get(0).setOpponent(players.get(1));
         players.get(1).setOpponent(players.get(0));
-        this.database = new Database();
-        this.questionsPerRound = gameSettings.getNumberOfQuestions();
-        this.rounds = gameSettings.getNumberOfRounds();
+        settings = new Settings();
+        this.database = new Database(settings);
+
     }
 
     @Override
@@ -35,9 +33,9 @@ public class Game implements Runnable {
      * Skapar nytt spel där newRound() anropas antal ggr som finns angivet i settings.
      */
     public void newGame() throws IOException, ClassNotFoundException {
-        for (int i = 0; i < rounds; i++) {
+        for (int i = 0; i < settings.getNumberOfRounds(); i++) {
             newRound();
-            if (i != rounds - 1) {
+            if (i != settings.getNumberOfRounds() - 1) {
                 printRoundPoints();
             }
             Collections.reverse(players);
@@ -49,11 +47,12 @@ public class Game implements Runnable {
      * skickas till båda spelarna i players det antal ggr som är lika med frågor per runda enligt settings
      */
     public void newRound() throws IOException, ClassNotFoundException {
-        CategoryName roundCategory = players.get(0).getCategoryFromUser();
-        for (int i = 0; i < questionsPerRound; i++) {
-            Question question = database.getRandomQuestionFromCategory(roundCategory);
-            for (Player player : players) {
-                setOfQuestions(player, question);
+        List<Question> roundQuestions = database.getRoundQuestions(players.get(0).getCategoryFromUser());
+        System.out.println(roundQuestions.size());
+        for (Player player : players) {
+            player.getOpponent().sendString("Inväntar svar från motståndare");
+        for (int i = 0; i < roundQuestions.size(); i++) {
+                setOfQuestions(player, roundQuestions.get(i));
             }
         }
     }

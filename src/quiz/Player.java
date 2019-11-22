@@ -45,6 +45,10 @@ public class Player {
         return roundPoints;
     }
 
+    public Player getOpponent() {
+        return opponent;
+    }
+
     public void setRoundPoints(int roundPoints) {
         this.roundPoints = roundPoints;
     }
@@ -53,7 +57,6 @@ public class Player {
      * Skickar Question till Player och String till opponent,
      */
     public void sendQuestion(Question question) throws IOException {
-        opponent.sendString("Inväntar svar från motståndare");
         output.writeObject(question);
     }
 
@@ -101,11 +104,7 @@ public class Player {
                 "\n" + opponent.getName() + " points: " + opponent.getTotalPoints();
         output.writeObject(result);
     }
-    /**
-     * Skickar CategoryChooser till användare som returnerar CategoryChooser innehållande vald kategori.
-     * skickar String till opponent.
-     * läser in CategoryChooser och returnerar valt CategoryName
-     */
+
     public CategoryName getCategoryFromUser() throws IOException, ClassNotFoundException {
         List<CategoryName> enumList = Arrays.asList(CategoryName.values());
         Collections.shuffle(enumList);
