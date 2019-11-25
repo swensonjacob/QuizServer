@@ -1,6 +1,8 @@
 package quiz;
 
-public class ScoreBoard {
+import java.io.Serializable;
+
+public class ScoreBoard implements Serializable {
     private String name;
     private int score;
     private int round;

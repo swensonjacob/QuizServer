@@ -1,6 +1,5 @@
 package quiz;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
@@ -31,9 +30,6 @@ public class Game implements Runnable {
         }
     }
 
-    /**
-     * Skapar nytt spel där newRound() anropas antal ggr som finns angivet i settings.
-     */
     public void newGame() throws IOException, ClassNotFoundException {
         for (int i = 0; i < settings.getNumberOfRounds(); i++) {
             newRound();
@@ -52,10 +48,6 @@ public class Game implements Runnable {
         Database.returnPlayerPoints();
     }
 
-    /**
-     * Ny runda skapas där val av kategori inhämtas från player1, genom en nästlad for-loop hämtas en slumpad fråga och
-     * skickas till båda spelarna i players det antal ggr som är lika med frågor per runda enligt settings
-     */
     public void newRound() throws IOException, ClassNotFoundException {
         List<Question> roundQuestions = database.getRoundQuestions(players.get(0).getCategoryFromUser());
         for (Player player : players) {
@@ -66,10 +58,6 @@ public class Game implements Runnable {
         }
     }
 
-    /**
-     * Skickar fråga till spelare, läser in svar från användaren.
-     * är inkommande objekt en en String innehållande "correct" adderas spelarens poäng.
-     */
     public void setOfQuestions(Player player, Question question) throws IOException, ClassNotFoundException {
         player.sendQuestion(question);
         Object inputFromPlayer = player.getInput();
@@ -78,28 +66,17 @@ public class Game implements Runnable {
         }
     }
 
-    /**
-     * Skickar rundans resultat till användaren och nollställer rundans poäng till nästa runda.
-     */
     public void printRoundPoints() throws IOException {
 
-        players.get(0).sendRoundPoints();
-        players.get(1).sendRoundPoints();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        players.get(0).sendPoints();
+        players.get(1).sendPoints();
         players.get(0).setRoundPoints(0);
         players.get(1).setRoundPoints(0);
     }
 
-    /**
-     * Skickar totalt resultat till användaren
-     */
     public void printTotalPoints() throws IOException {
-        players.get(0).sendTotalPoints();
-        players.get(1).sendTotalPoints();
+        players.get(0).sendPoints();
+        players.get(1).sendPoints();
 
     }
 }
