@@ -115,4 +115,3 @@ public class Player {
         return (CategoryName) input.readObject();
     }
 }
-

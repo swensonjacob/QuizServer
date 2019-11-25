@@ -73,7 +73,7 @@ public class Game implements Runnable {
     public void setOfQuestions(Player player, Question question) throws IOException, ClassNotFoundException {
         player.sendQuestion(question);
         Object inputFromPlayer = player.getInput();
-        if (inputFromPlayer.equals("correct")) {
+        if (inputFromPlayer.equals(question.getAnswerCorrect())) {
             player.addPoint();
         }
     }
