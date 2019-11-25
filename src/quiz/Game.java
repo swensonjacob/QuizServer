@@ -1,5 +1,6 @@
 package quiz;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ public class Game implements Runnable {
     private List<Player> players;
     private Database database;
     private Settings settings;
+    private int roundCounter = 1;
 
     public Game(Socket socketP1, Socket socketP2) {
         players = Arrays.asList(new Player("Player 1", socketP1), new Player("Player 2", socketP2));
@@ -19,6 +21,7 @@ public class Game implements Runnable {
         settings = new Settings();
         this.database = new Database(settings);
     }
+
     @Override
     public void run() {
         try {
@@ -27,6 +30,7 @@ public class Game implements Runnable {
             System.out.println(e.getMessage());
         }
     }
+
     /**
      * Skapar nytt spel där newRound() anropas antal ggr som finns angivet i settings.
      */
@@ -34,12 +38,20 @@ public class Game implements Runnable {
         for (int i = 0; i < settings.getNumberOfRounds(); i++) {
             newRound();
             if (i != settings.getNumberOfRounds() - 1) {
+                Database.scoreBoardList.add(new ScoreBoard(players.get(0).getName(), players.get(0).getRoundPoints(), roundCounter));
+                Database.scoreBoardList.add(new ScoreBoard(players.get(1).getName(), players.get(1).getRoundPoints(), roundCounter));
                 printRoundPoints();
+                roundCounter++;
             }
+
             Collections.reverse(players);
         }
+        Database.scoreBoardList.add(new ScoreBoard(players.get(0).getName(), players.get(0).getRoundPoints(), roundCounter));
+        Database.scoreBoardList.add(new ScoreBoard(players.get(1).getName(), players.get(1).getRoundPoints(), roundCounter));
         printTotalPoints();
+        Database.returnPlayerPoints();
     }
+
     /**
      * Ny runda skapas där val av kategori inhämtas från player1, genom en nästlad for-loop hämtas en slumpad fråga och
      * skickas till båda spelarna i players det antal ggr som är lika med frågor per runda enligt settings
@@ -48,11 +60,12 @@ public class Game implements Runnable {
         List<Question> roundQuestions = database.getRoundQuestions(players.get(0).getCategoryFromUser());
         for (Player player : players) {
             player.getOpponent().sendString("Inväntar svar från motståndare");
-        for (int i = 0; i < roundQuestions.size(); i++) {
+            for (int i = 0; i < roundQuestions.size(); i++) {
                 setOfQuestions(player, roundQuestions.get(i));
             }
         }
     }
+
     /**
      * Skickar fråga till spelare, läser in svar från användaren.
      * är inkommande objekt en en String innehållande "correct" adderas spelarens poäng.
@@ -64,6 +77,7 @@ public class Game implements Runnable {
             player.addPoint();
         }
     }
+
     /**
      * Skickar rundans resultat till användaren och nollställer rundans poäng till nästa runda.
      */
@@ -79,6 +93,7 @@ public class Game implements Runnable {
         players.get(0).setRoundPoints(0);
         players.get(1).setRoundPoints(0);
     }
+
     /**
      * Skickar totalt resultat till användaren
      */
