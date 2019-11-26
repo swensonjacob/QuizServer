@@ -64,6 +64,7 @@ public class Game implements Runnable {
                 setOfQuestions(player, roundQuestions.get(i));
             }
         }
+
     }
 
     /**
@@ -75,6 +76,9 @@ public class Game implements Runnable {
         Object inputFromPlayer = player.getInput();
         if (inputFromPlayer.equals(question.getAnswerCorrect())) {
             player.addPoint();
+        }else if(inputFromPlayer.equals("GETTUPP")){
+            player.getOpponent().sendString("GETTUPP");
+            System.out.println("Gett upp");
         }
     }
 
