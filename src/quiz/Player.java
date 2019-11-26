@@ -19,6 +19,7 @@ public class Player {
 
 
     public Player(String name, Socket socket) {
+        this.scoreBoard = new ScoreBoard();
         this.roundPoints = 0;
         this.name = name;
         try {
@@ -35,6 +36,10 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
     }
 
     public int getRoundPoints() {
@@ -62,16 +67,41 @@ public class Player {
         return input.readObject();
     }
 
+
+
     public void addPoint() {
         roundPoints++;
     }
 
-    public void closeRound() {
+    public void printScore() {
+        System.out.println("playerscore: " + this.scoreBoard.getPlayerScore().get(0));
+        System.out.println("opponentscore: " +this.scoreBoard.getOpponentScore().get(0));
+        System.out.println("round: " + this.scoreBoard.getCurrentRound());
 
     }
 
+    public void closeRound(boolean lastRound) {
+
+        this.scoreBoard.addPlayerRoundScore(this.roundPoints);
+        this.scoreBoard.addOpponentRoundScore(opponent.getRoundPoints());
+        this.scoreBoard.newRound();
+        this.scoreBoard.setLastRound(lastRound);
+
+        this.opponent.scoreBoard.addPlayerRoundScore(opponent.getRoundPoints());
+        this.opponent.scoreBoard.addOpponentRoundScore(this.roundPoints);
+        this.opponent.scoreBoard.newRound();
+        this.opponent.scoreBoard.setLastRound(lastRound);
+
+        setRoundPoints(0);
+        this.opponent.setRoundPoints(0);
+    }
+
     public void sendPoints() throws IOException {
-        output.writeObject();
+        System.out.println(this.scoreBoard.getPlayerScore().get(0));
+        System.out.println(this.scoreBoard.getOpponentScore().get(0));
+        System.out.println(this.scoreBoard.getCurrentRound());
+        this.output.writeObject(this.scoreBoard);
+        opponent.output.writeObject(opponent.getScoreBoard());
     }
 
     public CategoryName getCategoryFromUser() throws IOException, ClassNotFoundException {
