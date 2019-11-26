@@ -53,56 +53,26 @@ public class Player {
         this.roundPoints = roundPoints;
     }
 
-    /**
-     * Skickar Question till Player och String till opponent,
-     */
+
     public void sendQuestion(Question question) throws IOException {
         output.writeObject(question);
     }
 
-    /**
-     * Skickar String till Player.
-     */
     public void sendString(String message) throws IOException {
         output.writeObject(message);
     }
-    /**
-     * läser input från användare
-     */
+
     public Object getInput() throws IOException, ClassNotFoundException {
         return input.readObject();
     }
-    /**
-     * adderar poäng till Player
-     */
+
     public void addPoint() {
         roundPoints++;
         totalPoints++;
     }
-    /**
-     * Skickar rundans poäng för Player och opponent
-     */
-    public void sendRoundPoints() throws IOException {
-        String result = this.name + " points: " + roundPoints +
-                "\n" + opponent.getName() + " points: " + opponent.getRoundPoints();
-        output.writeObject(result);
-    }
-    /**
-     * Skickar total poäng för Player och opponent
-     */
-    public void sendTotalPoints() throws IOException {
-        String winMessage;
-        if (totalPoints > opponent.getTotalPoints()) {
-            winMessage = "Du vann!";
-        } else if (totalPoints == opponent.getTotalPoints()) {
-            winMessage = "Lika";
-        } else {
-            winMessage = "Du förlorade";
-        }
-        String result = winMessage +
-                "\n" + this.name + " points: " + totalPoints +
-                "\n" + opponent.getName() + " points: " + opponent.getTotalPoints();
-        output.writeObject(result);
+
+    public void sendPoints() throws IOException {
+        output.writeObject(new ScoreBoard("name",0,1));
     }
 
     public CategoryName getCategoryFromUser() throws IOException, ClassNotFoundException {

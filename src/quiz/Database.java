@@ -24,6 +24,7 @@ public class Database implements Serializable {
         questions.add((new Question(CategoryName.DJUR, "Lever dronten?", "Jajjamensan", "Det beror på", "Ingen som vet", "Nepps keps")));
         questions.add((new Question(CategoryName.MUSIK, "Vem var inte en medlem av ABBA", "Benny Andersson", "Björn Ulveus", "Anne-Frid Lyngstad", "Clabbe af Geijerstam")));
         questions.add((new Question(CategoryName.MUSIK, "Vilket instrument spelar Lars Ulrich?", "Trombon", "Mungiga", "Fan", "Trummor")));
+        questions.add((new Question(CategoryName.MUSIK, "Vilken artist är känd för sin moonwalk?", "Harvey Weinstein", "R Kelly", "Hagamannen", "Michael Jackson")));
         questions.add((new Question(CategoryName.SPORT, "Vad heter Daniel Sedins bror?", "Hjalle", "Heavy", "Lionel Richie", "Henrik Sedin")));
         questions.add((new Question(CategoryName.SPORT, "Vad har patrik Sjöberg hoppat som högst?", "1,25 m", "980 m", "0,7 m", "2,42 m")));
         questions.add((new Question(CategoryName.SPORT, "Vad kallas biljardpinnen?", "Gaffel", "Rododendron", "Heap", "Kö")));
@@ -35,7 +36,7 @@ public class Database implements Serializable {
     public List<Question> getRoundQuestions(CategoryName category) {
         List<Question> questionList = questions.stream().filter(c -> c.getCategory().equals(category)).collect(Collectors.toList());
         Collections.shuffle(questionList);
-        return questionList.subList(0, (settings.getQuestionsPerRound()));
+        return questionList.subList(0,settings.getQuestionsPerRound());
     }
 
     public static void returnPlayerPoints(){
