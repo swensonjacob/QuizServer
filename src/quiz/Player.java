@@ -14,11 +14,11 @@ public class Player {
     private Player opponent;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private int totalPoints;
     private int roundPoints;
+    private ScoreBoard scoreBoard;
+
 
     public Player(String name, Socket socket) {
-        this.totalPoints = 0;
         this.roundPoints = 0;
         this.name = name;
         try {
@@ -35,10 +35,6 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    public int getTotalPoints() {
-        return totalPoints;
     }
 
     public int getRoundPoints() {
@@ -68,11 +64,14 @@ public class Player {
 
     public void addPoint() {
         roundPoints++;
-        totalPoints++;
+    }
+
+    public void closeRound() {
+
     }
 
     public void sendPoints() throws IOException {
-        output.writeObject(new ScoreBoard("name",0,1));
+        output.writeObject();
     }
 
     public CategoryName getCategoryFromUser() throws IOException, ClassNotFoundException {
