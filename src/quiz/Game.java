@@ -78,7 +78,6 @@ public class Game implements Runnable {
             player.addPoint();
         }else if(inputFromPlayer.equals("GETTUPP")){
             player.getOpponent().sendString("GETTUPP");
-            System.out.println("Gett upp");
         }
     }
 
