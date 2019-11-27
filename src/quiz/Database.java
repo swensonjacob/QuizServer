@@ -10,7 +10,6 @@ public class Database implements Serializable {
 
     private List<Question> questions;
     private Settings settings;
-    public static List<ScoreBoard> scoreBoardList = new ArrayList<>();
 
 
     public Database(Settings settings) {
@@ -37,12 +36,6 @@ public class Database implements Serializable {
         List<Question> questionList = questions.stream().filter(c -> c.getCategory().equals(category)).collect(Collectors.toList());
         Collections.shuffle(questionList);
         return questionList.subList(0,settings.getQuestionsPerRound());
-    }
-
-    public static void returnPlayerPoints(){
-        scoreBoardList.forEach(scoreBoard -> {
-            System.out.println(scoreBoard);
-        } );
     }
 
 }

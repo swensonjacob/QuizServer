@@ -26,16 +26,12 @@ public class Player {
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
     public void setOpponent(Player opponent) {
         this.opponent = opponent;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public ScoreBoard getScoreBoard() {
@@ -54,7 +50,6 @@ public class Player {
         this.roundPoints = roundPoints;
     }
 
-
     public void sendQuestion(Question question) throws IOException {
         output.writeObject(question);
     }
@@ -67,17 +62,8 @@ public class Player {
         return input.readObject();
     }
 
-
-
     public void addPoint() {
         roundPoints++;
-    }
-
-    public void printScore() {
-        System.out.println("playerscore: " + this.scoreBoard.getPlayerScore().get(0));
-        System.out.println("opponentscore: " +this.scoreBoard.getOpponentScore().get(0));
-        System.out.println("round: " + this.scoreBoard.getCurrentRound());
-
     }
 
     public void closeRound(boolean lastRound) {
@@ -97,9 +83,8 @@ public class Player {
     }
 
     public void sendPoints() throws IOException {
-        System.out.println(this.scoreBoard.getPlayerScore().get(0));
-        System.out.println(this.scoreBoard.getOpponentScore().get(0));
-        System.out.println(this.scoreBoard.getCurrentRound());
+        this.output.reset();
+        opponent.output.reset();
         this.output.writeObject(this.scoreBoard);
         opponent.output.writeObject(opponent.getScoreBoard());
     }

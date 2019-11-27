@@ -46,8 +46,8 @@ public class Game implements Runnable {
         List<Question> roundQuestions = database.getRoundQuestions(players.get(0).getCategoryFromUser());
         for (Player player : players) {
             player.getOpponent().sendString("Inväntar svar från motståndare");
-            for (int i = 0; i < roundQuestions.size(); i++) {
-                setOfQuestions(player, roundQuestions.get(i));
+            for (Question roundQuestion : roundQuestions) {
+                setOfQuestions(player, roundQuestion);
             }
         }
     }
