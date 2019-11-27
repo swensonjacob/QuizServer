@@ -11,7 +11,6 @@ public class Game implements Runnable {
     private List<Player> players;
     private Database database;
     private Settings settings;
-    private int roundCounter = 1;
 
     public Game(Socket socketP1, Socket socketP2) {
         players = Arrays.asList(new Player("Player 1", socketP1), new Player("Player 2", socketP2));
@@ -34,26 +33,21 @@ public class Game implements Runnable {
         for (int i = 0; i < settings.getNumberOfRounds(); i++) {
             newRound();
             if (i != settings.getNumberOfRounds() - 1) {
-                Database.scoreBoardList.add(new ScoreBoard(players.get(0).getName(), players.get(0).getRoundPoints(), roundCounter));
-                Database.scoreBoardList.add(new ScoreBoard(players.get(1).getName(), players.get(1).getRoundPoints(), roundCounter));
-                printRoundPoints();
-                roundCounter++;
+                players.get(0).closeRound(false);
+                players.get(0).sendPoints();
             }
-
             Collections.reverse(players);
         }
-        Database.scoreBoardList.add(new ScoreBoard(players.get(0).getName(), players.get(0).getRoundPoints(), roundCounter));
-        Database.scoreBoardList.add(new ScoreBoard(players.get(1).getName(), players.get(1).getRoundPoints(), roundCounter));
-        printTotalPoints();
-        Database.returnPlayerPoints();
+        players.get(0).closeRound(true);
+        players.get(0).sendPoints();
     }
 
     public void newRound() throws IOException, ClassNotFoundException {
         List<Question> roundQuestions = database.getRoundQuestions(players.get(0).getCategoryFromUser());
         for (Player player : players) {
             player.getOpponent().sendString("Inväntar svar från motståndare");
-            for (int i = 0; i < roundQuestions.size(); i++) {
-                setOfQuestions(player, roundQuestions.get(i));
+            for (Question roundQuestion : roundQuestions) {
+                setOfQuestions(player, roundQuestion);
             }
         }
 
@@ -67,19 +61,5 @@ public class Game implements Runnable {
         }else if(inputFromPlayer.equals("GETTUPP")){
             player.getOpponent().sendString("GETTUPP");
         }
-    }
-
-    public void printRoundPoints() throws IOException {
-
-        players.get(0).sendPoints();
-        players.get(1).sendPoints();
-        players.get(0).setRoundPoints(0);
-        players.get(1).setRoundPoints(0);
-    }
-
-    public void printTotalPoints() throws IOException {
-        players.get(0).sendPoints();
-        players.get(1).sendPoints();
-
     }
 }

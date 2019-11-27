@@ -14,18 +14,19 @@ public class Player {
     private Player opponent;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private int totalPoints;
     private int roundPoints;
+    private ScoreBoard scoreBoard;
+
 
     public Player(String name, Socket socket) {
-        this.totalPoints = 0;
+        this.scoreBoard = new ScoreBoard();
         this.roundPoints = 0;
         this.name = name;
         try {
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -33,12 +34,8 @@ public class Player {
         this.opponent = opponent;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getTotalPoints() {
-        return totalPoints;
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
     }
 
     public int getRoundPoints() {
@@ -52,7 +49,6 @@ public class Player {
     public void setRoundPoints(int roundPoints) {
         this.roundPoints = roundPoints;
     }
-
 
     public void sendQuestion(Question question) throws IOException {
         output.writeObject(question);
@@ -68,11 +64,29 @@ public class Player {
 
     public void addPoint() {
         roundPoints++;
-        totalPoints++;
+    }
+
+    public void closeRound(boolean lastRound) {
+
+        this.scoreBoard.addPlayerRoundScore(this.roundPoints);
+        this.scoreBoard.addOpponentRoundScore(opponent.getRoundPoints());
+        this.scoreBoard.newRound();
+        this.scoreBoard.setLastRound(lastRound);
+
+        this.opponent.scoreBoard.addPlayerRoundScore(opponent.getRoundPoints());
+        this.opponent.scoreBoard.addOpponentRoundScore(this.roundPoints);
+        this.opponent.scoreBoard.newRound();
+        this.opponent.scoreBoard.setLastRound(lastRound);
+
+        setRoundPoints(0);
+        this.opponent.setRoundPoints(0);
     }
 
     public void sendPoints() throws IOException {
-        output.writeObject(new ScoreBoard("name",0,1));
+        this.output.reset();
+        opponent.output.reset();
+        this.output.writeObject(this.scoreBoard);
+        opponent.output.writeObject(opponent.getScoreBoard());
     }
 
     public CategoryName getCategoryFromUser() throws IOException, ClassNotFoundException {
