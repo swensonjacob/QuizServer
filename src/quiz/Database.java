@@ -25,15 +25,23 @@ public class Database implements Serializable {
         questions.add((new Question(CategoryName.MUSIK, "Vem var inte en medlem av ABBA", "Benny Andersson", "Björn Ulveus", "Anne-Frid Lyngstad", "Clabbe af Geijerstam")));
         questions.add((new Question(CategoryName.MUSIK, "Vilket instrument spelar Lars Ulrich?", "Trombon", "Mungiga", "Fan", "Trummor")));
         questions.add((new Question(CategoryName.MUSIK, "Vilken artist är känd för sin moonwalk?", "Harvey Weinstein", "R Kelly", "Hagamannen", "Michael Jackson")));
+        questions.add((new Question(CategoryName.MUSIK, "Vem sjunger låten Tuff brud i lyxförpackning?", "Stor-Babs", "Lil' Babs", "Babsan", "Lill-Babs")));
         questions.add((new Question(CategoryName.SPORT, "Vad heter Daniel Sedins bror?", "Hjalle", "Heavy", "Lionel Richie", "Henrik Sedin")));
         questions.add((new Question(CategoryName.SPORT, "Vad har patrik Sjöberg hoppat som högst?", "1,25 m", "980 m", "0,7 m", "2,42 m")));
         questions.add((new Question(CategoryName.SPORT, "Vad kallas biljardpinnen?", "Gaffel", "Rododendron", "Heap", "Kö")));
         questions.add((new Question(CategoryName.TV, "Vad hette Mikael Persbrandts karaktär i rederiet?", "Svenne Rubin", "Pär Le Port", "Micke Samuelsson", "Ola Simonsson")));
         questions.add((new Question(CategoryName.TV, "Vilket program existerar?", "Hela Sverige hälsar", "Hela Sverige stavar", "Hela Sverige grinar", "Hela Sverige bakar")));
         questions.add((new Question(CategoryName.TV, "Vem var expedition robinsons första programledare?", "Hans Fahlén", "Mr T", "Dr Phil", "Harald Treutiger")));
-        questions.add((new Question(CategoryName.FILM, "Vad heter julfilmen från 1988 där Bruce Willis spelar huvudrollen?", "Scrooge", "Home Alone", "The Holiday", "Die Hard")));
-        questions.add((new Question(CategoryName.FILM, "Vad heter julfilmen från 1988 där Bruce Willis spelar huvudrollen?", "Scrooge", "Home Alone", "The Holiday", "Die Hard")));
-        questions.add((new Question(CategoryName.FILM, "Vad heter julfilmen från 1988 där Bruce Willis spelar huvudrollen?", "Scrooge", "Home Alone", "The Holiday", "Die Hard")));
+        questions.add((new Question(CategoryName.TV, "Vem av dessa karaktärer finns inte i Twin Peaks?", "Leland Palmer", "Log Lady", "Dale Cooper", "Charlie Brown")));
+        questions.add((new Question(CategoryName.TV, "Hur många säsonger av Friends finns det?", "15", "20", "5", "10")));
+        questions.add((new Question(CategoryName.TV, "Vilken serie är karaktären Walter White ifrån?", "House", "Friends", "Game of Thrones", "Breaking Bad")));
+        questions.add((new Question(CategoryName.FILM, "Vilket år kom den första Harry Potter-filmen ut?", "2011", "1999", "2005", "2001")));
+        questions.add((new Question(CategoryName.FILM, "Vilket år är första Blade Runner ifrån?", "1979", "1992", "1988", "1982")));
+        questions.add((new Question(CategoryName.FILM, "När dog regissören Alfred Hitchcock?", "1950", "1960", "1970", "1980")));
+        questions.add((new Question(CategoryName.FILM, "Vad heter julfilmen från 1988 där Bruce Willis spelar huvudrollen?", "Scrooge", "The Holiday", "Home Alone", "Die Hard")));
+        questions.add((new Question(CategoryName.FILM, "Vad heter regissören som gjort Unbreakable?", "Steven Spielberg", "Stanley Kubrick", "Martin Scorsese", "M. Night Shyamalan")));
+        questions.add((new Question(CategoryName.FILM, "Vilken film är inte en Quentin Tarantino-film?", "Death Proof", "Pulp Fiction", "Jackie Brown", "Shaft")));
+
 
     }
 
