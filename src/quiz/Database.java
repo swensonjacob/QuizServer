@@ -31,6 +31,10 @@ public class Database implements Serializable {
         questions.add((new Question(CategoryName.TV, "Vad hette Mikael Persbrandts karaktär i rederiet?", "Svenne Rubin", "Pär Le Port", "Micke Samuelsson", "Ola Simonsson")));
         questions.add((new Question(CategoryName.TV, "Vilket program existerar?", "Hela Sverige hälsar", "Hela Sverige stavar", "Hela Sverige grinar", "Hela Sverige bakar")));
         questions.add((new Question(CategoryName.TV, "Vem var expedition robinsons första programledare?", "Hans Fahlén", "Mr T", "Dr Phil", "Harald Treutiger")));
+        questions.add((new Question(CategoryName.FILM, "Vad heter julfilmen från 1988 där Bruce Willis spelar huvudrollen?", "Scrooge", "Home Alone", "The Holiday", "Die Hard")));
+        questions.add((new Question(CategoryName.FILM, "Vad heter julfilmen från 1988 där Bruce Willis spelar huvudrollen?", "Scrooge", "Home Alone", "The Holiday", "Die Hard")));
+        questions.add((new Question(CategoryName.FILM, "Vad heter julfilmen från 1988 där Bruce Willis spelar huvudrollen?", "Scrooge", "Home Alone", "The Holiday", "Die Hard")));
+
     }
 
     public List<Question> getRoundQuestions(CategoryName category) {
